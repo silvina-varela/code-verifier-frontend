@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { login } from '../../services/authService';
 import { AxiosResponse } from 'axios';
+import { useNavigate } from 'react-router-dom'
 
 // Validation schema with Yup
 const loginSchema = Yup.object().shape(
@@ -13,7 +14,7 @@ const loginSchema = Yup.object().shape(
 )
 
 const LoginForm = () => {
-   
+    let navigate = useNavigate();
     const initialCredentials = {
         email: '',
         password: ''
@@ -29,18 +30,19 @@ const LoginForm = () => {
             <Formik
                 initialValues={initialCredentials}
                 validationSchema={loginSchema}
-                onSubmit={ async(values) => {
-                    login(values.email, values.password).then((response: AxiosResponse)=> {
-                        if(response.status === 200) {
-                            
+                onSubmit={ 
+                    async (values) => {
+                        login(values.email, values.password).then((response: AxiosResponse)=> {
+                            if(response.status === 200) {     
                              if(response.data.token){
-                                sessionStorage.setItem('session JWTtoken', response.data.token )
+                                sessionStorage.setItem('sessionJWTtoken', response.data.token)
+                                navigate('/');
                              } else {
                                 throw new Error('Error with token')
                              }
-                        } else {    
-                            throw new Error('Invalid credentials')
-                        }
+                            } else {    
+                                throw new Error('Invalid credentials')
+                            }
                     }).catch((error)=> console.log(`[LOGIN ERROR]: ${error}`))
                 }}
                 >
