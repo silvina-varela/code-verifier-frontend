@@ -1,10 +1,9 @@
 import React from 'react';
+import { Dashboard } from '../components/dashboard/Dashboard';
 
 
 export const HomePage = () => {
     return(
-        <div>
-            Home Page
-        </div>
+        <Dashboard/>
     )
 }
